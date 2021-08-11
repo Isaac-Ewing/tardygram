@@ -44,7 +44,7 @@ describe('tardygram routes', () => {
 
     const res = await request(app).get('/api/v1/posts');
 
-    expect(res.body).toEqual([{ ...post1 }, { ...post2 }, { ...post3 }]);
+    expect(res.body).toEqual([{ ...post2 }, { ...post1 }, { ...post3 }]);
   });
 
 });
