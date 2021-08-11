@@ -16,7 +16,11 @@ describe('tardygram auth routes', () => {
     return setup(pool);
   });
 
-  it('redirects to github for login', async (req, res, next) => {
-
+  it('returns user information from github', async () => {
+    const res = await request(app).get('/api/v1/auth/verify');
+    expect(res.body).toEqual({
+      username: 'test_user',
+      avatar_url: 'http://example.com/image.png'
+    })
   });
 });
