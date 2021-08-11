@@ -27,4 +27,12 @@ describe('tardygram routes', () => {
     expect(res.body).toEqual({ id: '1', ...postInfo, username: user.github_login });
   });
 
+  it('gets a post by id via GET', async () => {
+    const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
+    const post = await Post.insert({ photo_url: 'http://example.com/photo.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+
+    const res = await request(app).get(`/api/v1/posts/${post.id}`);
+
+    expect(res.body).toEqual({ ...post });
+  });
 });
