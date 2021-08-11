@@ -61,4 +61,15 @@ describe('tardygram routes', () => {
     });
   });
 
+  it('deletes a post by id via DELETE', async () => {
+    const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
+    const post = await Post.insert({ photo_url: 'http://example.com/photo.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+
+    const res = await request(app)
+      .delete(`/api/v1/posts/${post.id}`);
+      
+
+    expect(res.body).toEqual({ ...post });
+  });
+
 });
