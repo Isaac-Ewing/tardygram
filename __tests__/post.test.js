@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 const Post = require('../lib/models/Post');
+const Comment = require('../lib/models/Comment');
 
 jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   req.user = {
@@ -72,15 +73,52 @@ describe('tardygram routes', () => {
     expect(res.body).toEqual({ ...post });
   });
 
-  it('gets all posts via GET', async () => {
+  it('gets top 10 posts ranked by number of comments', async () => {
     const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
     const post1 = await Post.insert({ photo_url: 'http://example.com/photo1.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    await Comment.insert({ 
+      comment: 'groovy',
+      comment_by: user.id,
+      post: post1.id
+    });
+    await Comment.insert({ 
+      comment: ' very groovy',
+      comment_by: user.id,
+      post: post1.id
+    });
+    await Comment.insert({ 
+      comment: 'super groovy',
+      comment_by: user.id,
+      post: post1.id
+    });
     const post2 = await Post.insert({ photo_url: 'http://example.com/photo2.jpg', caption: 'Hahaha, so #cool', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    await Comment.insert({ 
+      comment: 'bleh',
+      comment_by: user.id,
+      post: post2.id
+    });
+    await Comment.insert({ 
+      comment: ' meh',
+      comment_by: user.id,
+      post: post2.id
+    });
+
     const post3 = await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: 'Hahaha, so #jelly', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    await Comment.insert({ 
+      comment: 'help me',
+      comment_by: user.id,
+      post: post3.id
+    });
+
+    for(let i = 0; i < 7; i++) {
+      const postName = `post${i + 4}`;
+      await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: `haha, this is post ${postName}`, tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    }
 
     const res = await request(app).get('/api/v1/posts');
-
-    expect(res.body).toEqual([{ ...post2 }, { ...post1 }, { ...post3 }]);
+    console.log(res.body);
+    expect(res.body.length).toEqual(10);
+    //expect([res.body[0], res.body[1], res.body[2]]).toEqual([{ ...post1 }, { ...post2 }, { ...post3 }]);
   });
 
 });
