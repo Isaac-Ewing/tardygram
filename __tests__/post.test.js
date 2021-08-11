@@ -72,4 +72,15 @@ describe('tardygram routes', () => {
     expect(res.body).toEqual({ ...post });
   });
 
+  it('gets all posts via GET', async () => {
+    const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
+    const post1 = await Post.insert({ photo_url: 'http://example.com/photo1.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    const post2 = await Post.insert({ photo_url: 'http://example.com/photo2.jpg', caption: 'Hahaha, so #cool', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    const post3 = await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: 'Hahaha, so #jelly', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+
+    const res = await request(app).get('/api/v1/posts');
+
+    expect(res.body).toEqual([{ ...post2 }, { ...post1 }, { ...post3 }]);
+  });
+
 });
