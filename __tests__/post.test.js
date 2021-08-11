@@ -47,4 +47,18 @@ describe('tardygram routes', () => {
     expect(res.body).toEqual([{ ...post2 }, { ...post1 }, { ...post3 }]);
   });
 
+  it('updates a post by id via PATCH', async () => {
+    const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
+    const post = await Post.insert({ photo_url: 'http://example.com/photo.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+
+    const res = await request(app)
+      .patch(`/api/v1/posts/${post.id}`)
+      .send({ caption: 'Nevermind, I do not relate to this anymore #unrelatable' });
+
+    expect(res.body).toEqual({ 
+      ...post,
+      caption: 'Nevermind, I do not relate to this anymore #unrelatable'
+    });
+  });
+
 });
