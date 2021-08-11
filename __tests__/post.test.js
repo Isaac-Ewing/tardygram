@@ -11,16 +11,16 @@ jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   next();
 });
 
-describe('tardygram auth routes', () => {
+describe('tardygram routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
 
-  it('returns user information from github', async () => {
-    const res = await request(app).get('/api/v1/auth/verify');
-    expect(res.body).toEqual({
-      username: 'test_user',
-      avatar_url: 'http://example.com/image.png'
-    });
+  it('creates a post via POST', async () => {
+    const postInfo = { photo_url: 'http://example.com/photo.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'], username: 'test_user' };
+
+    const res = await request(app).post('/api/v1/posts').send(postInfo);
+
+    expect(res.body).toEqual({ id: '1', ...postInfo });
   });
 });
