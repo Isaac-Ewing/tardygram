@@ -120,5 +120,4 @@ describe('tardygram routes', () => {
     expect(res.body.length).toEqual(10);
     expect([res.body[0], res.body[1], res.body[2]]).toEqual([{ ...post1, rank: '1' }, { ...post2, rank: '2' }, { ...post3, rank: '3' }]);
   });
-
 });
