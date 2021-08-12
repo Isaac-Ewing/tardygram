@@ -123,4 +123,43 @@ describe('bonus routes', () => {
 
     expect(res.body.length).toEqual(10);
   });
+  
+  it('Top 10 highest users by comment avg per post', async () => {
+    for(let i = 0; i < 11; i++) {
+      const user = await User.insert({ github_login: `user${i + 1}`, github_avatar_url: 'http://example.com/image.png' });
+      const postName = `post${i + 1}`;
+      await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: `haha, this is post ${postName}`, tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
+    }
+
+    for(let i = 0; i < 10; i++) {
+      const postIndex = i + 1;
+      await Comment.insert({ 
+        comment: 'groovy',
+        comment_by: `user${postIndex}`,
+        post: postIndex
+      });
+    }
+
+    for(let i = 0; i < 5; i++) {
+      const postIndex = i + 1;
+      await Comment.insert({ 
+        comment: 'groovy',
+        comment_by: `user${postIndex}`,
+        post: postIndex
+      });
+    }
+
+    for(let i = 0; i < 2; i++) {
+      const postIndex = i + 1;
+      await Comment.insert({ 
+        comment: 'groovy',
+        comment_by: `user${postIndex}`,
+        post: postIndex
+      });
+    }
+
+    const res = await request(app).get('/api/v1/users/impact');
+    console.log(res.body);
+    expect(res.body.length).toEqual(10);
+  });
 });
