@@ -115,10 +115,10 @@ describe('tardygram routes', () => {
       await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: `haha, this is post ${postName}`, tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
     }
 
-    const res = await request(app).get('/api/v1/posts');
-    console.log(res.body);
+    const res = await request(app).get('/api/v1/posts/popular');
+    
     expect(res.body.length).toEqual(10);
-    //expect([res.body[0], res.body[1], res.body[2]]).toEqual([{ ...post1 }, { ...post2 }, { ...post3 }]);
+    expect([res.body[0], res.body[1], res.body[2]]).toEqual([{ ...post1, rank: '1' }, { ...post2, rank: '2' }, { ...post3, rank: '3' }]);
   });
 
 });
