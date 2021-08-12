@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 const Post = require('../lib/models/Post');
+const Comment = require('../lib/models/Comment');
 
 jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   req.user = {
