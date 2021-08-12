@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 const Comment = require('../lib/models/Comment');
+const Post = require('../lib/models/Post.js');
 
 jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   req.user = {
@@ -13,13 +14,13 @@ jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   next();
 });
 
-describe('bonus routes', () =>{
+describe('bonus routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
 
   it('10 most popular users', async () => {
-    for(let i = 0; i < 10; i++) {
+    for(let i = 0; i < 11; i++) {
       const user = await User.insert({ github_login: `user${i + 1}`, github_avatar_url: 'http://example.com/image.png' });
       const postName = `post${i + 1}`;
       await Post.insert({ photo_url: 'http://example.com/photo3.jpg', caption: `haha, this is post ${postName}`, tags: ['relatable', 'cool', 'influencer'], username: user.github_login });
