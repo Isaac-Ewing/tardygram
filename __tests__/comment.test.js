@@ -4,6 +4,7 @@ const request = require('supertest');
 const app = require('../lib/app');
 const User = require('../lib/models/User');
 const Post = require('../lib/models/Post');
+const Comment = require('../lib/models/Comment');
 
 jest.mock('../lib/middleware/ensure-auth.js', () => (req, res, next) => {
   req.user = {
@@ -33,6 +34,21 @@ describe('tardygram routes', () => {
       post: 1, 
       comment: 'You take pictures good',  
       comment_by: user.github_login 
+    });
+  });
+
+  it('deletes a comment via DELETE', async () => {
+    const user = await User.insert({ github_login: 'test_user', github_avatar_url: 'http://example.com/image.png' });
+    const post = await Post.insert({ photo_url: 'http://example.com/photo.jpg', caption: 'Hahaha, so #relatable', tags: ['relatable', 'cool', 'influencer'] });
+    const comment = await Comment.insert({
+      post: post.id,
+      comment: 'You take pictures good'
+    });
+
+    const res = await request(app).delete(`/api/v1/comments/${comment.id}`);
+
+    expect(res.body).toEqual({ 
+      ...comment
     });
   });
 
