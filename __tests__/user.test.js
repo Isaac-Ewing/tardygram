@@ -56,6 +56,18 @@ describe('bonus routes', () => {
     const res = await request(app).get('/api/v1/users/popular');
 
     expect(res.body.length).toEqual(10);
+    expect(res.body).toEqual([
+      { github_login: 'user1', rank: '1' },
+      { github_login: 'user2', rank: '1' },
+      { github_login: 'user4', rank: '3' },
+      { github_login: 'user3', rank: '3' },
+      { github_login: 'user5', rank: '3' },
+      { github_login: 'user9', rank: '6' },
+      { github_login: 'user6', rank: '6' },
+      { github_login: 'user10', rank: '6' },
+      { github_login: 'user7', rank: '6' },
+      { github_login: 'user8', rank: '6' }
+    ]);
   });
 
   it('10 highest posting users', async () => {
@@ -81,8 +93,20 @@ describe('bonus routes', () => {
     }
 
     const res = await request(app).get('/api/v1/users/prolific');
-
+    
     expect(res.body.length).toEqual(10);
+    expect(res.body).toEqual([
+      { github_login: 'user1', rank: '1' },
+      { github_login: 'user2', rank: '1' },
+      { github_login: 'user4', rank: '3' },
+      { github_login: 'user3', rank: '3' },
+      { github_login: 'user5', rank: '3' },
+      { github_login: 'user9', rank: '6' },
+      { github_login: 'user6', rank: '6' },
+      { github_login: 'user10', rank: '6' },
+      { github_login: 'user7', rank: '6' },
+      { github_login: 'user8', rank: '6' }
+    ]);
   });
 
   it('10 most commenting users', async () => {
@@ -120,8 +144,20 @@ describe('bonus routes', () => {
     }
 
     const res = await request(app).get('/api/v1/users/leader');
-
+    
     expect(res.body.length).toEqual(10);
+    expect(res.body).toEqual([
+      { github_login: 'user1', rank: '1' },
+      { github_login: 'user2', rank: '1' },
+      { github_login: 'user4', rank: '3' },
+      { github_login: 'user3', rank: '3' },
+      { github_login: 'user5', rank: '3' },
+      { github_login: 'user9', rank: '6' },
+      { github_login: 'user6', rank: '6' },
+      { github_login: 'user10', rank: '6' },
+      { github_login: 'user7', rank: '6' },
+      { github_login: 'user8', rank: '6' }
+    ]);
   });
   
   it('Top 10 highest users by comment avg per post', async () => {
@@ -159,7 +195,19 @@ describe('bonus routes', () => {
     }
 
     const res = await request(app).get('/api/v1/users/impact');
-    console.log(res.body);
+    
     expect(res.body.length).toEqual(10);
+    expect(res.body).toEqual([
+      { username: 'user2', count: '3' },
+      { username: 'user1', count: '3' },
+      { username: 'user3', count: '2' },
+      { username: 'user5', count: '2' },
+      { username: 'user4', count: '2' },
+      { username: 'user6', count: '1' },
+      { username: 'user8', count: '1' },
+      { username: 'user9', count: '1' },
+      { username: 'user10', count: '1' },
+      { username: 'user7', count: '1' }
+    ]);
   });
 });
